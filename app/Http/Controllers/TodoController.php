@@ -14,7 +14,7 @@ class TodoController extends Controller
      */
     public function index()
     {
-        // list all todos
+        // Get all todos 
         return Todo::all();
     }
 
@@ -51,7 +51,7 @@ class TodoController extends Controller
      */
     public function show($id)
     {
-        // view specific todo
+        // Get a specific todo
        
         return Todo::find($id);
     }
@@ -84,11 +84,13 @@ class TodoController extends Controller
     }
     public function markTodoDone(Request $request, $id)
     {
-        // Mark todo done
+        // Mark todo as done
         $findTodo = Todo::find($id);
         $findTodo->status = true;
         $findTodo->save();
-        return $findTodo;
+        return response()->json([
+            'message'=>'Todo completed'
+        ]);
     }
 
     /**
@@ -99,7 +101,7 @@ class TodoController extends Controller
      */
     public function destroy($id)
     {
-        // Delete  todo
+        // Delete a todo
         $findTodo = Todo::find($id);
         if (!is_null($findTodo)) {
             $findTodo->delete();
@@ -117,9 +119,11 @@ class TodoController extends Controller
     {
         // multiple todo deletion
       
-        foreach (\json_decode($request['ids']) as $id) {
+        foreach ($request->ids as $id) {
             $findTodo = Todo::find($id);
-            $findTodo->delete();
+            if (!is_null($findTodo)) {
+                $findTodo->delete();
+            }
         }
       
          

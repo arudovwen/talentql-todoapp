@@ -14,7 +14,7 @@ class TodoController extends Controller
      */
     public function index()
     {
-        // Get all todos 
+        // Get all todos
         return Todo::all();
     }
 
@@ -46,23 +46,22 @@ class TodoController extends Controller
     /**
      * Display the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $todo
      * @return \Illuminate\Http\Response
      */
-    public function show($id)
+    public function show(Todo $todo)
     {
         // Get a specific todo
-       
-        return Todo::find($id);
+        return $todo;
     }
 
     /**
      * Show the form for editing the specified resource.
      *
-     * @param  int  $id
+     * @param  int  $todo
      * @return \Illuminate\Http\Response
      */
-    public function edit($id)
+    public function edit($todo)
     {
         //
     }
@@ -71,23 +70,21 @@ class TodoController extends Controller
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  int  $id
+     * @param  int  $todo
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(Request $request, Todo $todo)
     {
         // Update existing todo title
-        $findTodo = Todo::find($id);
-        $findTodo->title = $request->title;
-        $findTodo->save();
-        return $findTodo;
+        $todo->title = $request->title;
+        $todo->save();
+        return $todo;
     }
-    public function markTodoDone(Request $request, $id)
+    public function markTodoDone(Request $request, Todo $todo)
     {
         // Mark todo as done
-        $findTodo = Todo::find($id);
-        $findTodo->status = true;
-        $findTodo->save();
+        $todo->status = true;
+        $todo->save();
         return response()->json([
             'message'=>'Todo completed'
         ]);
@@ -96,15 +93,15 @@ class TodoController extends Controller
     /**
      * Remove the specified resource from storage.
      *
-     * @param  int  $id
+     * @param  int  $todo
      * @return \Illuminate\Http\Response
      */
-    public function destroy($id)
+    public function destroy(Todo $todo)
     {
         // Delete a todo
-        $findTodo = Todo::find($id);
-        if (!is_null($findTodo)) {
-            $findTodo->delete();
+     
+        if (!is_null($todo)) {
+            $todo->delete();
             return response()->json([
                  'message'=>'Todo deleted'
              ]);
@@ -115,12 +112,12 @@ class TodoController extends Controller
     }
 
    
-    public function multiDestroy(Request $request)
+    public function multiTodoDestroy(Request $request)
     {
         // multiple todo deletion
       
-        foreach ($request->ids as $id) {
-            $findTodo = Todo::find($id);
+        foreach ($request->todos as $todo) {
+            $findTodo = Todo::find($todo);
             if (!is_null($findTodo)) {
                 $findTodo->delete();
             }

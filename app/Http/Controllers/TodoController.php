@@ -36,7 +36,6 @@ class TodoController extends Controller
     public function store(Request $request)
     {
         // create a new todo
-
         return Todo::create([
             'title'=>$request->title,
             'status' => false
